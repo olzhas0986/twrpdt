@@ -29,6 +29,14 @@
 
 import /init.recovery.qcom_decrypt.rc
 
+on early-init
+    # Newer ROM vendor_boot ramdisks can inject this framework fragment.
+    # libvintf 4.0 cannot parse its version 9.0, invalidating the entire
+    # framework manifest and making keystore2 abort before recovery decrypts.
+    # Only remove the inherited ramdisk copy, before any HAL managers start.
+    # Recovery uses its own HIDL boot HAL and framework manifest.xml.
+    rm /system/etc/vintf/manifest/boot-service.qti.xml
+
 on fs
     export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw
     chown system system /sys/bus/i2c/drivers/aw8697_haptic/2-005a/f0_save
