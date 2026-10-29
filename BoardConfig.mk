@@ -1,0 +1,101 @@
+# SPDX-License-Identifier: Apache-2.0
+# POCO F4 (munch), TWRP android-12.1.
+
+DEVICE_PATH := device/xiaomi/munch
+
+# Snapdragon 870 / SM8250-AC. Keep the 32-bit ABI for recovery zip tools.
+TARGET_ARCH := arm64
+TARGET_ARCH_VARIANT := armv8-a
+TARGET_CPU_ABI := arm64-v8a
+TARGET_CPU_ABI2 :=
+TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT_RUNTIME := kryo385
+TARGET_2ND_ARCH := arm
+TARGET_2ND_ARCH_VARIANT := armv7-a-neon
+TARGET_2ND_CPU_ABI := armeabi-v7a
+TARGET_2ND_CPU_ABI2 := armeabi
+TARGET_2ND_CPU_VARIANT := generic
+TARGET_2ND_CPU_VARIANT_RUNTIME := kryo385
+TARGET_USES_64_BIT_BINDER := true
+
+TARGET_BOARD_PLATFORM := kona
+TARGET_BOOTLOADER_BOARD_NAME := kona
+TARGET_BOARD_PLATFORM_GPU := qcom-adreno650
+QCOM_BOARD_PLATFORMS += kona
+BOARD_USES_QCOM_HARDWARE := true
+TARGET_NO_BOOTLOADER := true
+TARGET_USES_UEFI := true
+TARGET_OTA_ASSERT_DEVICE := munch,munchin
+TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
+
+# Boot ramdisk recovery; retain the installed ROM's vendor_boot/DTB/DTBO.
+BOARD_USES_RECOVERY_AS_BOOT := true
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
+BOARD_BOOT_HEADER_VERSION := 3
+BOARD_KERNEL_PAGESIZE := 4096
+BOARD_KERNEL_IMAGE_NAME := Image
+TARGET_KERNEL_ARCH := arm64
+TARGET_KERNEL_HEADER_ARCH := arm64
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
+BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1
+BOARD_KERNEL_CMDLINE += msm_rtb.filter=0x237 service_locator.enable=1 androidboot.usbcontroller=a600000.dwc3 swiotlb=2048 loop.max_part=7 cgroup.memory=nokmem,nosocket reboot=panic_warm
+BOARD_KERNEL_CMDLINE += androidboot.init_fatal_reboot_target=recovery
+BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
+
+BOARD_BOOTIMAGE_PARTITION_SIZE := 201326592
+BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 100663296
+BOARD_FLASH_BLOCK_SIZE := 262144
+BOARD_SUPER_PARTITION_SIZE := 9126805504
+BOARD_SUPER_PARTITION_GROUPS := qti_dynamic_partitions
+BOARD_QTI_DYNAMIC_PARTITIONS_SIZE := 9122611200
+BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext product vendor odm
+BOARD_AVB_ENABLE := true
+
+TARGET_COPY_OUT_VENDOR := vendor
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
+TARGET_USERIMAGES_USE_EXT4 := true
+TARGET_USERIMAGES_USE_F2FS := true
+TARGET_USES_MKE2FS := true
+BOARD_HAS_LARGE_FILESYSTEM := true
+BOARD_SUPPRESS_SECURE_ERASE := true
+BOARD_ROOT_EXTRA_FOLDERS := bluetooth dsp firmware persist
+
+TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
+TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
+# TWRP copies this overlay (including ELF prebuilts) straight into its ramdisk.
+RECOVERY_VARIANT := twrp
+TARGET_RECOVERY_DEVICE_DIRS += $(DEVICE_PATH)
+
+# FBE v2 / wrapped keys / metadata encryption. Actual ROM support needs testing.
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_CRYPTO_FBE := true
+TW_INCLUDE_FBE_METADATA_DECRYPT := true
+TW_USE_FSCRYPT_POLICY := 2
+BOARD_USES_QCOM_FBE_DECRYPTION := true
+BOARD_USES_METADATA_PARTITION := true
+
+TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
+TW_THEME := portrait_hdpi
+TW_DEVICE_VERSION := olzhas0986
+RECOVERY_SDCARD_ON_DATA := true
+BOARD_HAS_NO_REAL_SDCARD := true
+TARGET_RECOVERY_QCOM_RTC_FIX := true
+TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
+TW_MAX_BRIGHTNESS := 2047
+TW_DEFAULT_BRIGHTNESS := 500
+TW_INPUT_BLACKLIST := "hbtp_vm"
+TW_EXCLUDE_DEFAULT_USB_INIT := true
+TW_EXTRA_LANGUAGES := true
+TW_DEFAULT_LANGUAGE := en
+TW_USE_TOOLBOX := true
+TW_INCLUDE_NTFS_3G := true
+TW_INCLUDE_REPACKTOOLS := true
+TW_INCLUDE_RESETPROP := true
+TW_EXCLUDE_TWRPAPP := true
+TW_EXCLUDE_APEX := true
+TW_SUPPORT_INPUT_AIDL_HAPTICS := true
+TWRP_INCLUDE_LOGCAT := true
+TARGET_USES_LOGD := true
